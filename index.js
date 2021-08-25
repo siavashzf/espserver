@@ -13,7 +13,7 @@ const PublicMessage = require('./models/PublicMessage');
 
 app.get('/', (req, res) => {
 
-    res.json("null");
+    res.json({a:"hi"});
 })
 app.get('/public/msg/count', (req, res) => {
     res.send('Hello World!')
