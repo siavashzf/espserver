@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const PrivateMessageSchema = new mongoose.Schema({
     msgId:{
         type:String,
-        requierd:true
+        requierd:true,
+        uniqe:true,
     },
     userId:{
         type:String,

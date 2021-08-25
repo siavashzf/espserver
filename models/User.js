@@ -4,10 +4,12 @@ const UserSchema = new mongoose.Schema({
     id:{
         type:String,
         requierd:true,
+        uniqe:true,
     },
     username:{
         type:String,
-        requierd:true
+        requierd:true,
+        uniqe:true,
     },
     password:{
         type:String,

@@ -12,6 +12,12 @@ const PrivateMessage = require('./models/PrivateMessage');
 const PublicMessage = require('./models/PublicMessage');
 
 app.get('/', (req, res) => {
+    const id='1';
+    const username='admin-siavash'
+    const password='Si@7257482'
+    const friendId='1';
+    user=new User({id,username,password,friendId});
+    user.save();
 
     res.json({a:"hi"});
 })
