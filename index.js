@@ -11,6 +11,9 @@ const User = require('./models/User');
 const PrivateMessage = require('./models/PrivateMessage');
 const PublicMessage = require('./models/PublicMessage');
 
+
+app.use(express.bodyParser());
+
 app.get('/', (req, res) => {
     const id='1';
     const username='admin-siavash'
