@@ -4,7 +4,7 @@ const PublicMessageSchema = new mongoose.Schema({
     msgId:{
         type:String,
         requierd:true,
-        uniqe:true,
+        unique:true,
     },
     message:{
         type:String,
