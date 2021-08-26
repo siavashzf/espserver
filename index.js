@@ -53,30 +53,35 @@ app.post('/login', (req, res) => {
                         username:user.username,
                         friendId:user.friendId
                     }
+                    res.json(response);
                 }else{
                     response={
                         status:'password incorrect',
                     }
+                    res.json(response);
                 }
             }
             else{
                 response={
-                    status:'password or ',
+                    status:'user not registerd ',
                 }
+                res.json(response);
             }
         })
         .catch(err=>{
             response={
                 status:'err :'+String(err),
             }
+            res.json(response);
         });
     
     }else{
         response={
             status:'bad req',
         }
+        res.json(response);
     }
-    res.json(response);
+    
 
 })
 
