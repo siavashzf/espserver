@@ -12,7 +12,7 @@ const PrivateMessage = require('./models/PrivateMessage');
 const PublicMessage = require('./models/PublicMessage');
 
 
-app.use(express.bodyParser());
+//app.use(express.bodyParser());
 
 app.get('/', (req, res) => {
     const id='1';
