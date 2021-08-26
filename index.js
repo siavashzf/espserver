@@ -1,4 +1,5 @@
 const express = require('express')
+const bodyParser = require('body-parser')
 const app = express()
 const port = process.env.PORT || 3000
 const mongoose = require('mongoose');
@@ -11,7 +12,7 @@ const User = require('./models/User');
 const PrivateMessage = require('./models/PrivateMessage');
 const PublicMessage = require('./models/PublicMessage');
 
-
+app.use(bodyParser.json())
 //app.use(express.bodyParser());
 
 app.get('/', (req, res) => {
