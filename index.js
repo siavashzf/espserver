@@ -29,6 +29,26 @@ app.get('/public/msg/count', (req, res) => {
     res.send('Hello World!')
 })
 
+app.get('/public/msg', (req, res) => {
+    let response;
+    PublicMessage.find()
+    .then(publicMessages=>{
+        if(publicMessages){
+            response={message:publicMessages,status:'ok'}
+        }
+        else
+        {
+            response={status:'on messages'}
+        }
+            res.json(response);
+    })
+    .catch(err=>{
+        response={message:publicMessages,status:"err : "+String(err),}
+        res.json(response);
+    })
+
+})
+
 app.get('/public/msg/:count(\\d+)', (req, res) => {
     req.params.count;
     res.send('Hello World!'+req.params.count);
@@ -81,8 +101,6 @@ app.post('/login', (req, res) => {
         }
         res.json(response);
     }
-    
-
 })
 
 app.put('/public/msg',(req, res) => {
