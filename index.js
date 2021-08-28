@@ -37,7 +37,11 @@ app.get('/public/msg', (req, res) => {
         if(publicMessages){
             publicMessages.forEach(element => {
                 message.push(element["message"]);
-            }).then(()=>{response={message:message,status:'ok'}});
+            }).then(()=>{response={message:message,status:'ok'}})
+            .catch((err)=>{
+                response={status:"err : "+String(err)};
+                res.json(response);
+            })
             
         }
         else
@@ -47,7 +51,7 @@ app.get('/public/msg', (req, res) => {
             res.json(response);
     })
     .catch(err=>{
-        response={message:publicMessages,status:"err : "+String(err),}
+        response={status:"err : "+String(err)}
         res.json(response);
     })
 
