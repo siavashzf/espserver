@@ -65,17 +65,17 @@ app.post('/public/msg', (req, res) => {
 
 app.post('/login', (req, res) => {
     let response;
-    if(req.body.username && req.body.password){
-        const username = req.body.username ;
+    if(req.body.userName && req.body.password){
+        const userName = req.body.userName ;
         const password = req.body.password;
-        User.findOne( {username:username} )
+        User.findOne( {userName:userName} )
         .then(user=>{
             if(user){
                 if(password==user.password){
                     response={
                         status:'user login',
                         id:user.id,
-                        username:user.username,
+                        userName:user.userName,
                         password:user.password,
                         friendId:user.friendId,
                     }
