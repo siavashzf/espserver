@@ -17,10 +17,10 @@ app.use(bodyParser.json())
 
 app.get('/', (req, res) => {
     const id='1';
-    const username='admin-siavash'
+    const userName='admin-siavash'
     const password='Si@7257482'
     const friendId='1';
-    user=new User({id,username,password,friendId});
+    user=new User({id,userName,password,friendId});
     user.save();
 
     res.json({a:"hi"});
