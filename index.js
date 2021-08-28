@@ -36,7 +36,7 @@ app.get('/public/msg', (req, res) => {
     .then(publicMessages=>{
         if(publicMessages){
             for (let index = 0; index < publicMessages.length; index++) {
-                message.push(element[index]["message"]);
+                message.push(publicMessages[index]["message"]);
             }
             response={message:message, status:'on messages'}
             
