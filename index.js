@@ -35,13 +35,10 @@ app.get('/public/msg', (req, res) => {
     PublicMessage.find()
     .then(publicMessages=>{
         if(publicMessages){
-            publicMessages.forEach(element => {
-                message.push(element["message"]);
-            }).then(()=>{response={message:message,status:'ok'}})
-            .catch((err)=>{
-                response={status:"err : "+String(err)};
-                res.json(response);
-            })
+            for (let index = 0; index < publicMessages.length; index++) {
+                message.push(element[index]["message"]);
+            }
+            response={message:message, status:'on messages'}
             
         }
         else
