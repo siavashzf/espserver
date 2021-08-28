@@ -76,7 +76,8 @@ app.post('/login', (req, res) => {
                         status:'user login',
                         id:user.id,
                         username:user.username,
-                        friendId:user.friendId
+                        password:user.password,
+                        friendId:user.friendId,
                     }
                     res.json(response);
                 }else{
