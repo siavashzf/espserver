@@ -31,10 +31,14 @@ app.get('/public/msg/count', (req, res) => {
 
 app.get('/public/msg', (req, res) => {
     let response;
+    let message;
     PublicMessage.find()
     .then(publicMessages=>{
         if(publicMessages){
-            response={message:publicMessages,status:'ok'}
+            publicMessages.forEach(element => {
+                message.push(element["message"]);
+            });
+            response={message:message,status:'ok'}
         }
         else
         {
