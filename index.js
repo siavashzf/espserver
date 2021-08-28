@@ -31,7 +31,7 @@ app.get('/public/msg/count', (req, res) => {
 
 app.get('/public/msg', (req, res) => {
     let response;
-    let message;
+    let message=new Array();
     PublicMessage.find()
     .then(publicMessages=>{
         if(publicMessages){
