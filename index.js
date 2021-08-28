@@ -37,8 +37,8 @@ app.get('/public/msg', (req, res) => {
         if(publicMessages){
             publicMessages.forEach(element => {
                 message.push(element["message"]);
-            });
-            response={message:message,status:'ok'}
+            }).then(()=>{response={message:message,status:'ok'}});
+            
         }
         else
         {
