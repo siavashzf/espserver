@@ -16,7 +16,7 @@ app.use(bodyParser.json())
 //app.use(express.bodyParser());
 
 app.get('/', (req, res) => {
-    const msgId=Math.random*1000;
+    const msgId=Math.floor(Math.random() * 1000);
     const userId='1'
     const message='سلام خوبی چه خبر'
     const expiration='1';
