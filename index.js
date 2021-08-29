@@ -35,6 +35,8 @@ app.get('/private/msg', (req, res) => {
         return;
     }
 
+
+    
     User.findOne({userName:req.headers.username,password:req.headers.password})
     .then(user=>{
         if(user){
