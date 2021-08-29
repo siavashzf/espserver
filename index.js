@@ -25,9 +25,51 @@ app.get('/', (req, res) => {
 
     res.json({a:"hi"});
 })
-app.get('/public/msg/count', (req, res) => {
-    res.send('Hello World!')
+
+app.get('/private/msg', (req, res) => {
+    let response;
+    if(req.headers.authorization==undefined){
+        response={status:'no authorization'}
+        res.json(response);
+        return;
+    }
+
+    let authorization =req.headers.authorization.split(" ");
+    
+
+    User.findOne({userName:authorization[0],password:authorization[1]})
+    .then(user=>{
+        if(user){
+            PrivateMessage.find({userId:user.id})
+            .then(privateMessages=>{
+                if(privateMessages){
+                    let message=new Array();
+                    for (let index = 0; index < privateMessages.length; index++) {
+                        message.push(privateMessages[index]["message"]);
+                    }
+                    response={message:message, status:'ok'}
+                }
+                else
+                {
+                    response={status:'on messages'}
+                }
+                    res.json(response);
+            }).catch(err=>{
+                response={status:"err : "+String(err)}
+                res.json(response);
+            })
+        }
+        else{
+            response={status:"not authorization"}
+        }
+
+    })
+    .catch(err=>{
+        response={status:"err : "+String(err)}
+        res.json(response);
+    })
 })
+
 
 app.get('/public/msg', (req, res) => {
     let response;
@@ -54,10 +96,6 @@ app.get('/public/msg', (req, res) => {
 
 })
 
-app.get('/public/msg/:count(\\d+)', (req, res) => {
-    req.params.count;
-    res.send('Hello World!'+req.params.count);
-})
 
 app.post('/public/msg', (req, res) => {
     res.send('Hello World!')
@@ -108,6 +146,7 @@ app.post('/login', (req, res) => {
         res.json(response);
     }
 })
+
 
 app.put('/public/msg',(req, res) => {
     let response;
