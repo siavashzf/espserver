@@ -38,7 +38,7 @@ app.get('/private/msg', (req, res) => {
     
     
 
-    User.findOne({userName:req.headers.userName,password:req.headers.password})
+    User.findOne({userName:req.headers.username,password:req.headers.password})
     .then(user=>{
         if(user){
             PrivateMessage.find({userId:user.id})
