@@ -29,16 +29,16 @@ app.get('/', (req, res) => {
 
 app.get('/private/msg', (req, res) => {
     let response;
-    if(req.headers.userName==undefined || req.headers.userName==undefined){
+    if(req.headers.userName==undefined || req.headers.password==undefined){
         response={status:'no authorization'}
         res.json(response);
         return;
     }
 
-    let authorization =req.headers.authorization.split(" ");
+    
     
 
-    User.findOne({userName:authorization[0],password:authorization[1]})
+    User.findOne({userName:req.headers.userName,password:req.headers.password})
     .then(user=>{
         if(user){
             PrivateMessage.find({userId:user.id})
