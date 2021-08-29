@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
 
 app.get('/private/msg', (req, res) => {
     let response;
-    if(req.headers.userName==undefined || req.headers.password==undefined){
+    if(req.headers.username==undefined || req.headers.password==undefined){
         response={status:'no authorization',head:req.headers}
         res.json(response);
         return;
