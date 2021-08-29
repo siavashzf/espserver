@@ -34,18 +34,21 @@ app.get('/private/msg', (req, res) => {
         res.json(response);
         return;
     }
-
-    
-    
-
+    console.log({userName:req.headers.username,password:req.headers.password});
+    console.log("s1");
     User.findOne({userName:req.headers.username,password:req.headers.password})
     .then(user=>{
+        console.log("s2");
         if(user){
+            console.log("s3");
             PrivateMessage.find({userId:user.id})
             .then(privateMessages=>{
+                console.log("s4");
                 if(privateMessages){
+                    console.log("s5");
                     let message=new Array();
                     for (let index = 0; index < privateMessages.length; index++) {
+                        console.log(index);
                         message.push(privateMessages[index]["message"]);
                     }
                     response={message:message, status:'ok'}
