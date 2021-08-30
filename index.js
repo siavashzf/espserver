@@ -38,6 +38,8 @@ app.get('/login', (req, res) => {
                 if(password==user.password){
                     response={
                         status:'user logedin',
+                        userName:user.userName,
+                        password:user.password
                     }
                     res.json(response);
                 }else{
