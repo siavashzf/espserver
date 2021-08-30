@@ -173,7 +173,12 @@ app.post('/private/msg', (req, res) => {
                     const message = req.body.message;
                     const expiration = req.body.expiration
                     let privateMessage = new PrivateMessage({msgId,userId,message,expiration});
-                    privateMessage.save().catch(err=>{
+                    privateMessage.save()
+                    .then(()=>{
+                        response={status:"message sended"}
+                        res.json(response);
+                    })
+                    .catch(err=>{
                         response={status:String(err)}
                         res.json(response);
                         return;
@@ -207,7 +212,12 @@ app.post('/public/msg', (req, res) => {
                     const message = req.body.message;
                     const expiration = req.body.expiration;
                     let publicMessage = new PublicMessage({msgId,message,expiration});
-                    publicMessage.save().catch(err=>{
+                    publicMessage.save()
+                    .then(()=>{
+                        response={status:"message sended"}
+                        res.json(response);
+                    })
+                    .catch(err=>{
                         response={status:String(err)}
                         res.json(response);
                         return;
