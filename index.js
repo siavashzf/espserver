@@ -28,6 +28,47 @@ app.get('/', (req, res) => {
     res.json({a:"hi"});
 })
 
+
+app.get('/login', (req, res) => {
+    let response;
+    if(req.headers.username==undefined || req.headers.password==undefined){
+        response={status:'no authorization or bad req' }
+        res.json(response);
+        return;
+    }else{
+        const userName = req.headers.username ;
+        const password = req.headers.password;
+        User.findOne( {userName:userName} )
+        .then(user=>{
+            if(user){
+                if(password==user.password){
+                    response={
+                        status:'user login',
+                    }
+                    res.json(response);
+                }else{
+                    response={
+                        status:'password incorrect',
+                    }
+                    res.json(response);
+                }
+            }
+            else{
+                response={
+                    status:'user not registerd ',
+                }
+                res.json(response);
+            }
+        })
+        .catch(err=>{
+            response={
+                status:'err :'+String(err),
+            }
+            res.json(response);
+        });
+    }
+})
+
 app.get('/private/msg', (req, res) => {
     let response;
     if(req.headers.username==undefined || req.headers.password==undefined){
@@ -76,14 +117,13 @@ app.get('/public/msg', (req, res) => {
         return;
     }
     let message=new Array();
+    let userNames =new Array();
     PublicMessage.find()
     .then(publicMessages=>{
         if(publicMessages){
             for (let index = 0; index < publicMessages.length; index++) {
                 message.push(publicMessages[index]["message"]);
             }
-            response={message:message, status:'ok'}
-            
         }
         else
         {
@@ -96,6 +136,23 @@ app.get('/public/msg', (req, res) => {
         res.json(response);
     })
 
+})
+app.get('/user',(req,res)=>{
+    if(req.headers.username==undefined || req.headers.password==undefined){
+        response={status:'no authorization',head:req.headers}
+        res.json(response);
+        return;
+    }
+    User.find().then(user=>{
+        for (let index = 0; index < user.length; index++) {
+            userNames.push(user[index]["userName"]);
+        }
+    })
+    .catch(err=>{
+        response={status:"err : "+String(err)}
+        res.json(response);
+    })
+    response={message:message,userName:userNames, status:'ok'}
 })
 
 
@@ -136,7 +193,7 @@ app.post('/private/msg', (req, res) => {
 })
 app.post('/public/msg', (req, res) => {
     let response;
-    if(req.headers.username==undefined || req.headers.password==undefined || req.body.message||req.body.expiration){
+    if(req.headers.username==undefined || req.headers.password==undefined || req.body.message || req.body.expiration){
         response={status:'no authorization or bad req' }
         res.json(response);
         return;
@@ -207,53 +264,6 @@ app.post('/user', (req, res) => {
         }
     }
 })
-
-app.post('/login', (req, res) => {
-    let response;
-    if(req.body.userName && req.body.password){
-        const userName = req.body.userName ;
-        const password = req.body.password;
-        User.findOne( {userName:userName} )
-        .then(user=>{
-            if(user){
-                if(password==user.password){
-                    response={
-                        status:'user login',
-                        id:user.id,
-                        userName:user.userName,
-                        password:user.password,
-                        friendId:user.friendId,
-                    }
-                    res.json(response);
-                }else{
-                    response={
-                        status:'password incorrect',
-                    }
-                    res.json(response);
-                }
-            }
-            else{
-                response={
-                    status:'user not registerd ',
-                }
-                res.json(response);
-            }
-        })
-        .catch(err=>{
-            response={
-                status:'err :'+String(err),
-            }
-            res.json(response);
-        });
-    
-    }else{
-        response={
-            status:'bad req',
-        }
-        res.json(response);
-    }
-})
-
 
 app.put('/password',(req, res) => {
     let response;
