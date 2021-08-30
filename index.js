@@ -155,7 +155,7 @@ app.get('/user',(req,res)=>{
 
 app.post('/private/msg', (req, res) => {
     let response;
-    if(req.headers.username==undefined || req.headers.password==undefined || req.body.message||req.body.id|| req.body.expiration){
+    if(req.headers.username==undefined || req.headers.password==undefined || req.body.message==undefined||req.body.id==undefined|| req.body.expiration==undefined){
         response={status:'no authorization or bad req' }
         res.json(response);
         return;
