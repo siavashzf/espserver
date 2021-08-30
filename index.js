@@ -34,6 +34,7 @@ app.get('/login', (req, res) => {
         User.findOne( {userName:userName} )
         .then(user=>{
             if(user){
+                console.log("hi ime in");
                 if(password==user.password){
                     response={
                         status:'user logedin',
