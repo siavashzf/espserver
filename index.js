@@ -59,6 +59,7 @@ app.get('/login', (req, res) => {
                 }
                 res.json(response);
             }
+            
         })
         .catch(err=>{
             response={
