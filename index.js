@@ -31,6 +31,9 @@ app.get('/login', (req, res) => {
     }else{
         const userName = req.headers.username ;
         const password = req.headers.password;
+        console.log("in login get :");
+        console.log(userName);
+        console.log(password);
         User.findOne( {userName:userName} )
         .then(user=>{
             if(user){
@@ -51,7 +54,7 @@ app.get('/login', (req, res) => {
             }
             else{
                 response={
-                    status:'user not registerd ',
+                    status:'user not registerd',
                 }
                 res.json(response);
             }
