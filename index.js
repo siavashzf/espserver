@@ -195,7 +195,7 @@ app.post('/private/msg', (req, res) => {
 })
 app.post('/public/msg', (req, res) => {
     let response;
-    if(req.headers.username==undefined || req.headers.password==undefined || req.body.message || req.body.expiration){
+    if(req.headers.username==undefined || req.headers.password==undefined || req.body.message==undefined || req.body.expiration==undefined){
         response={status:'no authorization or bad req' }
         res.json(response);
         return;
