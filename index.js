@@ -43,7 +43,7 @@ app.get('/login', (req, res) => {
             if(user){
                 if(password==user.password){
                     response={
-                        status:'user login',
+                        status:'user logedin',
                     }
                     res.json(response);
                 }else{
