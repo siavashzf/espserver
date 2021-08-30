@@ -117,7 +117,7 @@ app.get('/public/msg', (req, res) => {
     PublicMessage.find()
     .then(publicMessages=>{
         if(publicMessages){
-            for (let index = 0; index < publicMessages.length; index++) {
+            for (let index = 1; index < publicMessages.length; index++) {
                 message.push(publicMessages[index]["message"]);
             }
             response={status:'ok',message:message}
