@@ -10,15 +10,16 @@ const PublicMessageSchema = new mongoose.Schema({
         type:String,
         requierd:true
     },
+
     expiration:{
-        type:String,
+        type:Date,
         requierd:true
     },
     production:{
-        type:String,
-        requierd:true
-    }
-
+        type:Date,
+        requierd:true,
+        default:Date.now
+    },
 
 });
 const PublicMessage = mongoose.model('PublicMessage',PublicMessageSchema);

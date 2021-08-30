@@ -4,6 +4,7 @@ const app = express()
 const port = process.env.PORT || 3000
 const mongoose = require('mongoose');
 const db = require('./config/keys').MongoURI
+const uuid = require('uuid');
 mongoose.connect(db,{useNewUrlParser:true,useUnifiedTopology:true})
 .then(()=>console.log("mongo Connected"))
 .catch(err=>console.log(err));
@@ -21,7 +22,7 @@ app.get('/', (req, res) => {
     const message='سلام خوبی چه خبر'
     const expiration='1';
     const production='1';
-    privateMessage=new PrivateMessage({msgId,userId,message,expiration,production});
+    let privateMessage = new PrivateMessage({msgId,userId,message,expiration,production});
     privateMessage.save();
 
     res.json({a:"hi"});
@@ -34,9 +35,6 @@ app.get('/private/msg', (req, res) => {
         res.json(response);
         return;
     }
-
-
-    
     User.findOne({userName:req.headers.username,password:req.headers.password})
     .then(user=>{
         if(user){
@@ -70,10 +68,13 @@ app.get('/private/msg', (req, res) => {
         res.json(response);
     })
 })
-
-
 app.get('/public/msg', (req, res) => {
     let response;
+    if(req.headers.username==undefined || req.headers.password==undefined){
+        response={status:'no authorization',head:req.headers}
+        res.json(response);
+        return;
+    }
     let message=new Array();
     PublicMessage.find()
     .then(publicMessages=>{
@@ -98,8 +99,113 @@ app.get('/public/msg', (req, res) => {
 })
 
 
+app.post('/private/msg', (req, res) => {
+    let response;
+    if(req.headers.username==undefined || req.headers.password==undefined || req.body.message||req.body.id|| req.body.expiration){
+        response={status:'no authorization or bad req' }
+        res.json(response);
+        return;
+    }else{
+        if(req.headers.username.indexOf("admin-")!=0){
+            response={status:'you are not admin' }
+            res.json(response);
+            return;
+        }else{
+            User.findOne( {userName:req.headers.username,password:req.headers.password} )
+            .then(user=>{
+                if(user){
+                    const userId = req.body.id
+                    const msgId = uuid.v4();
+                    const message = req.body.message;
+                    const expiration = req.body.expiration
+                    let privateMessage = new PrivateMessage({msgId,userId,message,expiration});
+                    privateMessage.save().catch(err=>{
+                        response={status:String(err)}
+                        res.json(response);
+                        return;
+                    })
+
+                }else{
+                    response={status:'you are not admin'}
+                    res.json(response);
+                    return;
+                }
+            })
+        }
+    }
+})
 app.post('/public/msg', (req, res) => {
-    res.send('Hello World!')
+    let response;
+    if(req.headers.username==undefined || req.headers.password==undefined || req.body.message||req.body.expiration){
+        response={status:'no authorization or bad req' }
+        res.json(response);
+        return;
+    }else{
+        if(req.headers.username.indexOf("admin-")!=0){
+            response={status:'you are not admin' }
+            res.json(response);
+            return;
+        }else{
+            User.findOne( {userName:req.headers.username,password:req.headers.password} )
+            .then(user=>{
+                if(user){
+                    const msgId = uuid.v4();
+                    const message = req.body.message;
+                    const expiration = req.body.expiration;
+                    let publicMessage = new PublicMessage({msgId,message,expiration});
+                    publicMessage.save().catch(err=>{
+                        response={status:String(err)}
+                        res.json(response);
+                        return;
+                    })
+
+                }else{
+                    response={status:'you are not admin'}
+                    res.json(response);
+                    return;
+                }
+            })
+        }
+    }
+})
+app.post('/user', (req, res) => {
+    let response;
+    if(req.headers.username==undefined || req.headers.password==undefined || req.body.userName||req.body.password){
+        response={status:'no authorization or bad req' }
+        res.json(response);
+        return;
+    }else{
+        if(req.headers.username.indexOf("admin-")!=0){
+            response={status:'you are not admin' }
+            res.json(response);
+            return;
+        }else{
+            User.findOne( {userName:req.headers.username,password:req.headers.password} )
+            .then(user=>{
+                if(user){
+                    response={status:'user already exist'}
+                    res.json(response);
+                    return;
+                }else{
+                    const id=uuid.v4();
+                    const userName=req.body.userName;
+                    const password=req.body.password;
+                    const friendId='0';
+                    let newUser = new User({id,userName,password,friendId});
+                    newUser.save().then(()=>{
+                        response={status:'user ceated'}
+                        res.json(response);
+                        return;
+                    })
+                    .catch(err=>{
+                        response={status:String(err)}
+                        res.json(response);
+                        return;
+                    })
+                }
+            })
+        }
+    }
 })
 
 app.post('/login', (req, res) => {
@@ -149,28 +255,26 @@ app.post('/login', (req, res) => {
 })
 
 
-app.put('/public/msg',(req, res) => {
+app.put('/password',(req, res) => {
     let response;
-
-    const msgId = req.body.msgId;
-    const message = req.body.message
-    const expiration = req.body.expiration
-    const production = req.body.production
-    if(msgId && message && expiration && production){
-        const newPublicMessage = new PublicMessage({msgId,message,expiration,production});
-        newPublicMessage.save()
-        .then(publicMessage=>{
-            response={
-                status:'publicMessage saved',
-            }
+    if(req.headers.username==undefined || req.headers.password==undefined || req.body.newPassword){
+        response={status:'no authorization or bad req' }
+        res.json(response);
+        return;
+    }else{
+        const filter = {userName:req.headers.username,password:req.headers.password};
+        const update = {password:req.body.newPassword}
+        User.findOneAndUpdate(filter,update)
+        .then(()=>{
+            response={status:'password changed' }
+            res.json(response);
         })
         .catch(err=>{
-            response={
-                status:'err : '+String(err),
-            }  
-        });
+            response={status:'password changed' }
+            res.json(response)
+        })
+
     }
-    res.json(response);
 })
 
 app.listen(port, () => {

@@ -15,14 +15,15 @@ const PrivateMessageSchema = new mongoose.Schema({
         requierd:true
     },
     expiration:{
-        type:String,
+        type:Date,
         requierd:true
     },
     production:{
-        type:String,
-        requierd:true
+        type:Date,
+        requierd:true,
+        default:Date.now
+        
     },
-
 
 });
 const PrivateMessage = mongoose.model('PrivateMessage',PrivateMessageSchema);
